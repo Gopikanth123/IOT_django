@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Milk Data Form</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    {% csrf_token %}
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Milk Data Form</h1>
+        <form id="milkForm">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="canNo">Can No:</label>
+                <input type="text" class="form-control" id="canNo" name="canNo" required>
+            </div>
+
+            <div class="form-group">
+                <label for="customerName">Customer Name:</label>
+                <input type="text" class="form-control" id="customerName" name="customerName" required>
+            </div>
+
+            <div class="form-group">
+                <label for="weight">Weight Of Milk:</label>
+                <input type="text" class="form-control" id="weight" name="weight" required>
+            </div>
+
+            <div class="form-group">
+                <label for="snf">SNF:</label>
+                <input type="text" class="form-control" id="snf" name="snf" required>
+            </div>
+
+            <div class="form-group">
+                <label for="fat">Fat %:</label>
+                <input type="text" class="form-control" id="fat" name="fat" required>
+            </div>
+
+            <div class="form-group">
+                <label for="clr">CLR:</label>
+                <input type="text" class="form-control" id="clr" name="clr" required>
+            </div>
+
+            <div class="form-group">
+                <label for="addedWater">Added Water:</label>
+                <input type="text" class="form-control" id="addedWater" name="addedWater" required>
+            </div>
+
+            <button type="button" class="btn btn-primary mr-2" onclick="getData()">Get</button>
+            <button type="button" class="btn btn-success mr-2" onclick="submitData()">Submit</button>
+            <button type="button" class="btn btn-info" onclick="printPdf()">Print PDF</button>
+
+        </form>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script>
+        // Function to get CSRF token from the server
+        function getCSRFToken() {
+            return document.getElementsByName('csrfmiddlewaretoken')[0].value;
+        }
+
+        async function getData() {
+            try {
+                // Replace with the actual endpoint URL where Thonny server provides the data
+                var url = 'http://localhost:8000/';
+    
+                // Make an asynchronous GET request to fetch data
+                var response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCSRFToken(),
+                    },
+                });
+                
+                var data = await response.json();
+    
+                // Update form fields with received data
+                document.getElementById("canNo").value = data.can_number;
+                document.getElementById("customerName").value = data.name;
+                document.getElementById("weight").value = data.weight;
+                document.getElementById("snf").value = data.snf;
+                document.getElementById("fat").value = data.fat;
+                document.getElementById("clr").value = data.clr;
+                document.getElementById("addedWater").value = data.adc_water;
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+    
+        function submitData() {
+            alert('Submitting data...');
+        }
+    
+        function printPdf() {
+            alert('Printing PDF...');
+        }
+    </script>
+</body>
+</html>
